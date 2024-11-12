@@ -1,0 +1,29 @@
+[package]
+name = "start"
+version = "0.1.0"
+edition = "2021"
+authors = ["David Choi"]
+description = "Twitter clone written in Axum"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+path = "src/main.rs"
+name = "api"
+
+[dependencies]
+anyhow = "1.0.91"
+async-trait = "0.1.83"
+assert_matches = "1.5.0"
+axum = "0.7.7"
+chrono = { version = "0.4.38", features = ["serde"] }
+dotenv = "0.15.0"
+fake = { version = "3.0.1", features=['derive']}
+httpc-test = "0.1.10"
+mockall = "0.13.0"
+serde = { version = "1.0.215", features = ["derive"] }
+serde_json = "1.0.132"
+sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-rustls", "chrono"]}
+tokio = { version = "1.41.1", features = ["full"] }
+tokio-test = "0.4.4"
