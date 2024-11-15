@@ -38,7 +38,7 @@ use axum::{extract::State, Router};
 use dotenv::dotenv;
 use lib::app_state::AppState;
 use repository::repo::DbRepo;
-use routes::profile::profile_rt::get_profile_route;
+use routes::profile::profile_rt::get_profile_routes;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
@@ -62,6 +62,6 @@ pub async fn run() {
     _ = axum::serve(
         tokio::net::TcpListener::bind(format!("{}:{}", host, port)).await.unwrap(),
         Router::new()
-            .merge(get_profile_route(state))
+            .merge(get_profile_routes(state))
     ).await;
 }

@@ -17,4 +17,3 @@ fi
 
 echo "build new images"
 docker compose -p server -f ./deploy/docker-compose.yml up -d --build
-
