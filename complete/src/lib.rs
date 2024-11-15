@@ -32,14 +32,36 @@ pub mod repository {
     }
 }
 
-use axum::Router;
+use std::sync::Arc;
+use std::env;
+use axum::{extract::State, Router};
 use dotenv::dotenv;
+use lib::app_state::AppState;
+use repository::repo::DbRepo;
+use routes::profile::profile_rt::get_profile_route;
+use tracing::{info, Level};
+use tracing_subscriber::FmtSubscriber;
 
 pub async fn run() {
     dotenv().ok();
 
+    let host = env::var("HOST").unwrap();
+    let port = env::var("PORT").unwrap().parse::<u16>().unwrap();
+
+    let tracing_sub = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .finish();
+    tracing::subscriber::set_global_default(tracing_sub)
+        .expect("Setting default subscriber failed");
+
+    let state = State(Arc::new(AppState {
+        repo: DbRepo::init().await
+    }));
+
+    info!("Server starting at {}:{}", host, port);
     _ = axum::serve(
-        tokio::net::TcpListener::bind("0.0.0.0:4000").await.unwrap(),
+        tokio::net::TcpListener::bind(format!("{}:{}", host, port)).await.unwrap(),
         Router::new()
+            .merge(get_profile_route(state))
     ).await;
 }
