@@ -29,7 +29,6 @@ create table message (
     "body"  varchar(140),
     "likes" int NOT NULL DEFAULT 0,
     "image" bytea,
-    "msg_group_type" int,
 
     constraint fk_profile foreign key(user_id) references profile(id)
 );

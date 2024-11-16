@@ -1,3 +1,5 @@
+use std::sync::Arc;
+use tracing::error;
 use axum::response::{IntoResponse, Response};
 use axum::extract::{Path, State};
 use axum::Json;
@@ -6,7 +8,6 @@ use crate::repository::profile::profile_repo::{InsertProfileFn, SelectProfileFn}
 use crate::repository::repo::Repository;
 use crate::routes::lib::app_response::AppResponse;
 use crate::routes::lib::error::AppErrors;
-use std::sync::Arc;
 use super::profile_models::CreateProfile;
 // use fake::faker::internet::en::Username;
 // use fake::faker::name::en::{FirstName, LastName};
@@ -29,7 +30,10 @@ pub async fn create_profile(State(state): State<Arc<AppState>>, Json(create_prof
         create_profile.avatar
     ).await {
         Ok(entity) => AppResponse::Create(entity.id).into_response(),
-        Err(_) => AppErrors::InternalServerError.into_response()
+        Err(e) => {
+            error!("Error failed insert_profile {:?}", e);
+            AppErrors::InternalServerError.into_response()
+        }
     }    
 }
 
@@ -37,6 +41,9 @@ pub async fn get_profile(State(state): State<Arc<AppState>>, Path(id): Path<i64>
     let app_state = Arc::clone(&state);
     match app_state.repo.select_profile(app_state.repo.get_pool(), id).await {
         Ok(profile) => AppResponse::JsonData(profile).into_response(),
-        Err(_) => AppErrors::InternalServerError.into_response()
+        Err(e) => {
+            error!("Error failed get_profile {:?}", e);   
+            AppErrors::InternalServerError.into_response()
+        }
     }
 }

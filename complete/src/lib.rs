@@ -13,6 +13,9 @@ pub mod routes {
         pub mod error;
         pub mod app_response;
     }
+    pub mod message {
+        pub mod message_rt;
+    }
     pub mod profile {
         pub mod profile_rt;
     }
@@ -38,7 +41,7 @@ use axum::{extract::State, Router};
 use dotenv::dotenv;
 use lib::app_state::AppState;
 use repository::repo::DbRepo;
-use routes::profile::profile_rt::get_profile_routes;
+use routes::{message::message_rt::get_message_routes, profile::profile_rt::get_profile_routes};
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
@@ -62,6 +65,7 @@ pub async fn run() {
     _ = axum::serve(
         tokio::net::TcpListener::bind(format!("{}:{}", host, port)).await.unwrap(),
         Router::new()
-            .merge(get_profile_routes(state))
+            .merge(get_profile_routes(state.clone()))
+            .merge(get_message_routes(state))
     ).await;
 }
