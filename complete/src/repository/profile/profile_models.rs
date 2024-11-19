@@ -1,8 +1,8 @@
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, Deserialize, FromRow)]
 pub struct ProfileQueryResult {
     pub id: i64,
     pub created_at: DateTime<Utc>,

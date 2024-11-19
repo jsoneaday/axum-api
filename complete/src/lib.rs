@@ -33,6 +33,13 @@ pub mod repository {
         pub mod profile_models;
         pub mod profile_repo;
     }
+    pub mod follow {
+        pub mod follow_models;
+        pub mod follow_repo;
+    }
+}
+pub mod testing {
+    pub mod fixtures;
 }
 
 use std::sync::Arc;

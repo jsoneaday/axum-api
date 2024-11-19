@@ -1,8 +1,8 @@
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, Deserialize, FromRow)]
 pub struct MessageQueryResult {
     pub id: i64,
     pub created_at: DateTime<Utc>,
@@ -13,7 +13,7 @@ pub struct MessageQueryResult {
     pub likes: i32
 }
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, FromRow, Clone)]
 pub struct MessageWithProfileQueryResult {
     // messsage fields
     pub id: i64,
@@ -30,7 +30,7 @@ pub struct MessageWithProfileQueryResult {
     pub message_broadcast_id: Option<i64>    
 }
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, Deserialize, FromRow)]
 pub struct MessageWithFollowingAndBroadcastQueryResult {
     // messsage fields
     pub id: i64,

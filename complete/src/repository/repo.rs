@@ -1,9 +1,10 @@
 use axum::{http::StatusCode, response::IntoResponse};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgPoolOptions, prelude::FromRow, PgPool};
 use std::env;
+use dotenv::dotenv;
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, Deserialize, FromRow)]
 pub struct EntityId {
     pub id: i64
 }
@@ -41,6 +42,8 @@ impl Repository for DbRepo {
 }
 
 async fn get_coon() -> PgPool {
+    dotenv().ok();
+
     let host = env::var("POSTGRES_HOST").unwrap();
     let port = env::var("POSTGRES_PORT").unwrap();
     let user_name = env::var("POSTGRES_USER").unwrap();

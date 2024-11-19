@@ -9,11 +9,6 @@ use crate::repository::repo::Repository;
 use crate::routes::lib::app_response::AppResponse;
 use crate::routes::lib::error::AppErrors;
 use super::profile_models::CreateProfile;
-// use fake::faker::internet::en::Username;
-// use fake::faker::name::en::{FirstName, LastName};
-// use fake::faker::lorem::en::Sentence;
-// use fake::faker::address::en::CountryName;
-// use fake::Fake;
 
 
 pub async fn create_profile(State(state): State<Arc<AppState>>, Json(create_profile): Json<CreateProfile>) -> Response {
@@ -29,7 +24,7 @@ pub async fn create_profile(State(state): State<Arc<AppState>>, Json(create_prof
         create_profile.main_url,
         create_profile.avatar
     ).await {
-        Ok(entity) => AppResponse::Create(entity.id).into_response(),
+        Ok(entity) => AppResponse::Create(entity).into_response(),
         Err(e) => {
             error!("Error failed insert_profile {:?}", e);
             AppErrors::InternalServerError.into_response()
