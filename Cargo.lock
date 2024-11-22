@@ -292,8 +292,6 @@ dependencies = [
  "chrono",
  "dotenv",
  "fake",
- "http",
- "hyper",
  "mockall",
  "serde",
  "serde_json",
