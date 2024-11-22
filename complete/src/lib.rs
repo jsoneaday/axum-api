@@ -38,7 +38,7 @@ pub mod repository {
         pub mod follow_repo;
     }
 }
-pub mod testing {
+pub mod test_utils {
     pub mod fixtures;
 }
 
@@ -48,7 +48,7 @@ use axum::{extract::State, Router};
 use dotenv::dotenv;
 use lib::app_state::AppState;
 use repository::repo::DbRepo;
-use routes::{message::message_rt::get_message_routes, profile::profile_rt::get_profile_routes};
+use routes::{message::message_rt::get_message_routes, profile::profile_rt::get_profile_router};
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
@@ -72,7 +72,7 @@ pub async fn run() {
     _ = axum::serve(
         tokio::net::TcpListener::bind(format!("{}:{}", host, port)).await.unwrap(),
         Router::new()
-            .merge(get_profile_routes(state.clone()))
+            .merge(get_profile_router(state.clone()))
             .merge(get_message_routes(state))
     ).await;
 }
